@@ -11,10 +11,11 @@ on with making your application without having to worry about such details.
 We'll quickly outline how to use BedSit to develop an app.
 
 ### Loading
+
 BedSit extends SitCalc or STRIPState, both of which provide the same
 interface but differ in their situation representation. Thus, when
 developing your BedSit app, you need to load your chosen one in your
-`loader.lgt`.
+`loader.lgt` file.
 
 To do this, you need your chosen situation manager, in this example SitCalc, on your machine and your
 `settings.lgt` file needs to locate it:
@@ -23,9 +24,16 @@ To do this, you need your chosen situation manager, in this example SitCalc, on 
 ```logtalk
 :- multifile(logtalk_library_path/2).
 :- dynamic(logtalk_library_path/2).
-logtalk_library_path(sitcalc, home('MyLogTalkLibs/sitcalc/')).
-logtalk_library_path(stripstate, home('MyLogTalkLibs/stripstate/')).
-logtalk_library_path(bedsit, home('MyLogTalkLibs/bedsit/')).
+
+% redefine the "my_logtalk_libraries" library alias for the directory name and
+% location where you will be cloning/downloading BedSit, SitCalc, and STRIPState
+logtalk_library_path(my_logtalk_libraries, home('MyLogtalkLibs/')).
+
+% assuming that the clones/downloads use the library names,
+% no need to redefine the library aliases that follow
+logtalk_library_path(sitcalc, my_logtalk_libraries('SitCalc/')).
+logtalk_library_path(stripstate, my_logtalk_libraries('STRIPState/')).
+logtalk_library_path(bedsit, my_logtalk_libraries('BedSit/')).
 ```
 
 **`loader.lgt`**
@@ -266,7 +274,7 @@ observing events, you'll need to define this in the loader:
 
 Now you can define your own view object:
 
-```
+```logtalk
 :- object(app_view,
     instantiates(view_class)).
 
@@ -289,7 +297,7 @@ When you have multiple `situation_manager` instances, you'll need to
 tell which instance of the `view_class` observes which ones:
 
 
-```
+```logtalk
 :- object(app_view,
     instantiates(view_class)).
 
