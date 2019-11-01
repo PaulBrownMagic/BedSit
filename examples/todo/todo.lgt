@@ -21,7 +21,7 @@
     extends(action)).
 
    poss(S) :-
-       \+ todos::current_todo(todo(_Label_, todo), S).
+       \+ todos::current_todo(todo(_Label_, _), S).
 
 :- end_object.
 
