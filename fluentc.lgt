@@ -29,7 +29,7 @@
         , argnames is ['Fluent', 'SituationManager']
         ]).
     holds(Fluent, SM) :-
-        instantiates_class(SM, situation_manager),
+        situation_manager::instance(SM),
         functor(Fluent, Func, Ar),
         NAr is Ar + 1,
         ::fluent(Func/NAr),

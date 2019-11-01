@@ -1,6 +1,7 @@
 
 :- object(bedsit_metaclass,
-    instantiates(bedsit_metaclass)).
+    instantiates(bedsit_metaclass),
+    imports(class_hierarchy)).
 
     :- info([ version is 1.0
             , author is 'Paul Brown'
@@ -25,7 +26,6 @@
         , argnames is ['Instance']
         ]).
     only(Inst) :-
-        self(Self),
-        findall(Inst, instantiates_class(Inst, Self), [Inst]).
+        ::descendants([Inst]).
 
 :- end_object.

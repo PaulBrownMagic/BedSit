@@ -1,6 +1,8 @@
 
 :- initialization((
-	logtalk_load(os(loader)),
+	logtalk_load([ os(loader)
+                 , hierarchies(loader)
+                 ]),
 	logtalk_load([
 		bedsit_metaclass,
 		sit_man,

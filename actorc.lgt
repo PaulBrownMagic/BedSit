@@ -43,7 +43,7 @@
         ]).
     do(A, SM) :-
         nonvar(A), nonvar(SM),
-        extends_object(A, action), instantiates_class(SM, situation_manager),
+        extends_object(A, action), situation_manager::instance(SM),
         functor(A, Func, Ar),
         ::action(Func/Ar),
         SM::do(A).

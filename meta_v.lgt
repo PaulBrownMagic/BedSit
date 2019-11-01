@@ -19,11 +19,9 @@
     instances_render(SM) :-
         situation_manager::only(SM),
         SM::sit(S),
-        self(Self),
-        forall(instantiates_class(Inst, Self), Inst::render(S)).
+        forall(::descendant(Inst), Inst::render(S)).
     instances_render(SM) :-
-        self(Self),
         SM::sit(Sit),
-        forall((instantiates_class(Inst, Self), Inst::view_for(SM)), Inst::render(Sit)).
+        forall((::descendant(Inst), Inst::view_for(SM)), Inst::render(Sit)).
 
 :- end_object.

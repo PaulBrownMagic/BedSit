@@ -35,7 +35,7 @@
     check_make(SM, _, _) :-
         % Already exists.
         nonvar(SM),
-        instantiates_class(SM, situation_manager), !.
+        situation_manager::instance(SM), !.
     check_make(SM, File, Sit) :-
         (nonvar(SM), \+ current_object(SM) ; var(SM)),
         restore(File, SM, Sit).
@@ -51,10 +51,11 @@
 
    % On situation_manager update, broadcast to appropriate instances to persist
    after(SM, do(_), _Sender) :-
-       self(Self),
-       forall((instantiates_class(Inst, Self), Inst::situation_manager(SM)), Inst::persist).
+       persist_send(SM).
    after(SM, do(_, SM), _Sender) :-
-       self(Self),
-       forall((instantiates_class(Inst, Self), Inst::situation_manager(SM)), Inst::persist).
+       persist_send(SM).
+
+   persist_send(SM) :-
+       forall((::descendant(Inst), Inst::situation_manager(SM)), Inst::persist).
 
 :- end_object.
