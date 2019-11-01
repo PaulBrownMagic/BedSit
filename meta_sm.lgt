@@ -1,6 +1,6 @@
 
 :- object(meta_sm,
-    specializes(bs_metaclass)).
+    specializes(bedsit_metaclass)).
 
     :- info([ version is 1.0
             , author is 'Paul Brown'

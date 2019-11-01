@@ -1,7 +1,7 @@
 
 :- object(meta_v,
     implements(monitoring),
-    specializes(bs_metaclass)).
+    specializes(bedsit_metaclass)).
 
     :- info([ version is 1.0
             , author is 'Paul Brown'
