@@ -32,10 +32,10 @@ logtalk_library_path(bedsit, home('MyLogTalkLibs/bedsit/')).
 ```logtalk
 :- initialization((
     logtalk_load([ sitcalc(loader)
-	             , bedsit(loader)
-				 , ... your app files ...
-				 ])
-	)).
+                 , bedsit(loader)
+                 , ... your app files ...
+                 ])
+    )).
 ```
 
 ### Managing Situations
@@ -52,34 +52,34 @@ this in your loader and so refer to it in your application:
 ```logtalk
 :- initialization((
     logtalk_load([ sitcalc(loader)
-	             , bedsit(loader)
-				 ]),
-	situation_manager::new(sm, s0),
-	logtalk_load([
-				 , ... your app files ...
-				 ])
-	)).
+                 , bedsit(loader)
+                 ]),
+    situation_manager::new(sm, s0),
+    logtalk_load([
+                 , ... your app files ...
+                 ])
+    )).
 ```
 
 **some_app_file**
 ```logtalk
 ...
     todos::do(add_todo(Label)).
-	todos::holds(completed(Todo)).
-	sm::holds(todos::completed(Todo) and todos::recent(Todo)).
+    todos::holds(completed(Todo)).
+    sm::holds(todos::completed(Todo) and todos::recent(Todo)).
 ...
 ```
 
 Only having a single `situation_manager` instance means we don't always have to
-explicitly name it, as per the first two example in **some_app_file**.
+explicitly name it, as per the first two examples in **some_app_file**.
 We can have more than one though, in which case we explicitly pass it:
 
 **some_app_file**
 ```logtalk
 ...
     todos::do(add_todo(Label), sm).
-	todos::holds(completed(Todo), sm).
-	sm::holds(todos::completed(Todo) and todos::recent(Todo)).
+    todos::holds(completed(Todo), sm).
+    sm::holds(todos::completed(Todo) and todos::recent(Todo)).
 ...
 ```
 
@@ -92,11 +92,11 @@ when doing actions:
 :- object(todos,
     imports(actorc)).
 
-	acts_upon(sm).
+    acts_upon(sm).
 
 ...
     todos::do(add_todo(Label)).
-	todos::holds(completed(Todo), sm).
+    todos::holds(completed(Todo), sm).
 ...
 ```
 
@@ -113,12 +113,12 @@ For the observations to work you need to tell Logtalk about the events:
 ```logtalk
 :- initialization((
     logtalk_load([ sitcalc(loader)
-	             , bedsit(loader)
-				 , ... your app files ...
-				 ]),
-	define_events(after, _, do(_), _, persistent_manager),
-	define_events(after, _, do(_, _), _, persistent_manager)
-	)).
+                 , bedsit(loader)
+                 , ... your app files ...
+                 ]),
+    define_events(after, _, do(_), _, persistent_manager),
+    define_events(after, _, do(_, _), _, persistent_manager)
+    )).
 ```
 
 The simplest way to use a `persistency_manager` instance is to let it
@@ -140,7 +140,7 @@ doesn't exist yet, particularly useful for STRIPState.
 ```logtalk
 ?- persistency_manager(sm,
      'persisted/sm_store.pl',
-	 [current(level, 0), hp(player, 100)]).
+     [current(level, 0), hp(player, 100)]).
 true.
 
 ?- sm::sit(S).
@@ -163,18 +163,18 @@ actions it can do:
 :- object(jump,
     extends(action)).
 
-	poss(_Sit) :- true.
+    poss(_Sit) :- true.
 
 :- end_object.
 
 :- object(bean,
     imports(actorc)).
 
-	% Optional: define the situation_manager
-	% instance bean acts_upon if more than one is defined:
-	% acts_upon(sm).
+    % Optional: define the situation_manager
+    % instance bean acts_upon if more than one is defined:
+    % acts_upon(sm).
 
-	action(jump/0).
+    action(jump/0).
 
 :- end_object.
 ```
@@ -207,15 +207,15 @@ For STRIPState:
 :- object(teacup,
     imports(fluentc)).
 
-	fluent(contents/2).
+    fluent(contents/2).
 
-	:- public(contents/2).
-	contents(C, Sit) :-
+    :- public(contents/2).
+    contents(C, Sit) :-
         self(Self),
-		situation::holds(contents(Self, C), Sit).
+        situation::holds(contents(Self, C), Sit).
 
     :- public(colour/1).
-	colour(white).
+    colour(white).
 
 :- end_object.
 ```
@@ -224,15 +224,15 @@ For SitCalc:
 :- object(teacup,
     imports(fluentc)).
 
-	fluent(contents/2).
+    fluent(contents/2).
 
-	:- public(contents/2).
-	contents(C, do(A, S)) :-
-	    A = fill(teacup, C)
-	  ; contents(C, S), A \= empty(teacup, C).
+    :- public(contents/2).
+    contents(C, do(A, S)) :-
+        A = fill(teacup, C)
+      ; contents(C, S), A \= empty(teacup, C).
 
     :- public(colour/1).
-	colour(white).
+    colour(white).
 
 :- end_object.
 ```
@@ -256,12 +256,12 @@ observing events, you'll need to define this in the loader:
 ```logtalk
 :- initialization((
     logtalk_load([ sitcalc(loader)
-	             , bedsit(loader)
-				 , ... your app files ...
-				 ]),
-	define_events(after, _, do(_), _, view_class),
-	define_events(after, _, do(_, _), _, view_class)
-	)).
+                 , bedsit(loader)
+                 , ... your app files ...
+                 ]),
+    define_events(after, _, do(_), _, view_class),
+    define_events(after, _, do(_, _), _, view_class)
+    )).
 ```
 
 Now you can define your own view object:
@@ -275,8 +275,8 @@ Now you can define your own view object:
         ]).
 
     render(Sit) :-
-	    findall(F, situation::holds(F, Sit), Fluents),
-		print_message(information, app_view, 'Fluents'::Fluents).
+        findall(F, situation::holds(F, Sit), Fluents),
+        print_message(information, app_view, 'Fluents'::Fluents).
 
 :- end_object.
 ```
@@ -297,12 +297,12 @@ tell which instance of the `view_class` observes which ones:
             print_message/3
         ]).
 
-	view_for(sm1).
-	view_for(sm4).
+    view_for(sm1).
+    view_for(sm4).
 
     render(Sit) :-
-	    findall(F, situation::holds(F, Sit), Fluents),
-		print_message(information, app_view, 'Fluents'::Fluents).
+        findall(F, situation::holds(F, Sit), Fluents),
+        print_message(information, app_view, 'Fluents'::Fluents).
 
 :- end_object.
 ```
