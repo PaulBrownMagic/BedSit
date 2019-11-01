@@ -1,0 +1,11 @@
+.complete_btn {
+    position: relative;
+    float: right;
+    left: -2rem;
+    float: right;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    font-size: 1.6rem;
+    line-height: 1;
+}
