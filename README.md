@@ -245,9 +245,9 @@ Some example queries:
 ?- sm::sit(Sit), situation:holds(teacup::contents(Drink) and not teacup::colour(black), Sit).
 ```
 
-### A View Category
+### A View Class
 
-The `view` category is the bedrock of the output part of your UI. The
+The `view_class` is the bedrock of the output part of your UI. The
 view works by observing changes to situations in any situation manager
 and passing that situation to the `render/1` predicate. As it's
 observing events, you'll need to define this in the loader:
@@ -259,8 +259,8 @@ observing events, you'll need to define this in the loader:
 	             , bedsit(loader)
 				 , ... your app files ...
 				 ]),
-	define_events(after, _, do(_), _, view),
-	define_events(after, _, do(_, _), _, view)
+	define_events(after, _, do(_), _, view_class),
+	define_events(after, _, do(_, _), _, view_class)
 	)).
 ```
 
@@ -268,7 +268,7 @@ Now you can define your own view object:
 
 ```
 :- object(app_view,
-    imports(view)).
+    instantiates(view_class)).
 
     :- uses(logtalk, [
             print_message/3
@@ -284,3 +284,27 @@ Now you can define your own view object:
 It's recommended to make use of `print_message/3` and then hook into
 this for the actual graphical representation. This'll make your app
 easier to port to different GUIs and test.
+
+When you have multiple `situation_manager` instances, you'll need to
+tell which instance of the `view_class` observes which ones:
+
+
+```
+:- object(app_view,
+    instantiates(view_class)).
+
+    :- uses(logtalk, [
+            print_message/3
+        ]).
+
+	view_for(sm1).
+	view_for(sm4).
+
+    render(Sit) :-
+	    findall(F, situation::holds(F, Sit), Fluents),
+		print_message(information, app_view, 'Fluents'::Fluents).
+
+:- end_object.
+```
+
+

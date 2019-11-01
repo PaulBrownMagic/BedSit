@@ -315,25 +315,44 @@
 :- end_category.
 
 
-:- category(view,
-    implements(monitoring)).
+:- object(meta_v,
+    implements(monitoring),
+    specializes(bs_metaclass)).
 
-    :- info([ version is 1.1
+    :- info([ version is 1.0
             , author is 'Paul Brown'
-            , date is 2019/10/30
-            , comment is 'A category for application views that render the situation for some UI.'
+            , date is 2019/11/2
+            , comment is 'An specialization of the metaclass for view_class.'
             ]).
 
     % Monitor for actions being done in the application and upate the view
     after(SM, do(_), _Sender) :-
-        SM::current_predicate(sit/1),
-        SM::sit(S),
-        ::render(S).
-
+        instances_render(SM).
     after(SM, do(_, SM), _Sender) :-
-        SM::current_predicate(sit/1),
+        instances_render(SM).
+
+
+    instances_render(SM) :-
+        situation_manager::only(SM),
         SM::sit(S),
-        ::render(S).
+        self(Self),
+        forall(instantiates_class(Inst, Self), Inst::render(S)).
+    instances_render(SM) :-
+        self(Self),
+        SM::sit(Sit),
+        forall((instantiates_class(Inst, Self), Inst::view_for(SM)), Inst::render(Sit)).
+
+:- end_object.
+
+
+:- object(view_class,
+    instantiates(meta_v)).
+
+    :- info([ version is 1.0
+            , author is 'Paul Brown'
+            , date is 2019/11/2
+            , comment is 'A parent class for views that are sent the situation to render'
+            ]).
 
     :- public(render/1).
     :- mode(render(+term), zero_or_one).
@@ -342,4 +361,12 @@
         , argnames is ['Situation']
         ]).
 
-:- end_category.
+    :- public(view_for/1).
+    :- mode(view_for(+object), zero_or_one).
+    :- mode(view_for(-object), zero_or_more).
+    :- info(view_for/1,
+        [ comment is 'This view will render the situation of the given SituationManager.'
+        , argnames is ['SituationManager']
+        ]).
+
+:- end_object.
