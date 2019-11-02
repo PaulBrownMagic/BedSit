@@ -1,11 +1,11 @@
 :- if((
-	current_logtalk_flag(prolog_dialect, swi),
-	current_prolog_flag(gui, true)
+    current_logtalk_flag(prolog_dialect, swi),
+    current_prolog_flag(gui, true)
 )).
 
 
     :- initialization((
-		logtalk_load(xpce_hooks),
+        logtalk_load(xpce_hooks),
         logtalk_load([ sitcalc(loader)
                      , random(loader)
                      , bedsit(loader)
@@ -20,8 +20,8 @@
 
 :- else.
 
-	:- initialization((
-		write('(this example requires SWI-Prolog as the backend compiler)'), nl
-	)).
+    :- initialization((
+        write('(this example requires SWI-Prolog as the backend compiler)'), nl
+    )).
 
 :- endif.

@@ -12,10 +12,13 @@ with:
 - `Web_loader.lgt` to launch a server so you can navigate to
   [localhost:8000](http://localhost:8000/) in the web browser of your
   choice
-- `Chromium_loader.lgt` to launch the Chromium browser in "pretending to
+- `Chromium_loader.lgt` to launch the Chromium/Chrome browser in "pretending to
   be a native-desktop app" mode. Obviously this depends on you having
-  Chromium installed and it assumes the executable is called "chromium",
-  which you can change in `chromium_app.pl`.
+  Chromium or Chrome installed. It searches for executables under
+  common names, you can adjust this in `chromium_app.pl`. Note,
+  `www_url_open` works with your launching program (`xdg-open`
+  typically for linux, `open` for MacOS) and so does not work with the
+  path to the chrom(e/ium) executable.
 
 If everything is setup as described in the [main
 README](https://github.com/PaulBrownMagic/BedSit) and you have `logtalk`
