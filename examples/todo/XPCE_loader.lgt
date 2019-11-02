@@ -5,9 +5,7 @@
 
 
     :- initialization((
-		logtalk_load_context(directory, Directory),
-		atom_concat(Directory, xpce_hooks, Path),
-		consult(Path),
+		logtalk_load(xpce_hooks),
         logtalk_load([ sitcalc(loader)
                      , random(loader)
                      , bedsit(loader)

@@ -5,11 +5,7 @@
 
 
     :- initialization((
-		logtalk_load_context(directory, Directory),
-		atom_concat(Directory, web_hooks, Path),
-		consult(Path),
-		atom_concat(Directory, chromium_app, CPath),
-		consult(CPath),
+		logtalk_load([web_hooks, chromium_app]),
         logtalk_load([ sitcalc(loader)
                      , random(loader)
                      , bedsit(loader)
