@@ -28,7 +28,7 @@ function update_todos(resp) {
 }
 
 function addTodo () {
-    const label = $('#newtodo').parent().children('input').first().val()
+    const label = $('#newtodo').val()
     const action = `add_todo('${label}')`
     socket.send(action)
 }
