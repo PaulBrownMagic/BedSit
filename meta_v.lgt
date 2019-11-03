@@ -3,9 +3,9 @@
     implements(monitoring),
     specializes(bedsit_metaclass)).
 
-    :- info([ version is 1.0
+    :- info([ version is 1.1
             , author is 'Paul Brown'
-            , date is 2019/11/2
+            , date is 2019/11/3
             , comment is 'An specialization of the metaclass for view_class.'
             ]).
 
@@ -17,7 +17,6 @@
 
 
     instances_render(SM) :-
-        situation_manager::only(SM),
         SM::sit(S),
         forall(::descendant(Inst), Inst::render(S)).
     instances_render(SM) :-

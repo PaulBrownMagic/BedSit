@@ -1,7 +1,8 @@
 :- category(fluent_predicates).
     :- public(fluent/1).
+    :- public(acts_upon/1).
 
-    :- info([ version is 1.1
+    :- info([ version is 1.2
             , author is 'Paul Brown'
             , date is 2019/11/3
             , comment is 'An category for objects with fluent predicates.'
@@ -16,7 +17,7 @@
         , argnames is ['Fluent']
         ]).
     holds(Fluent) :-
-        situation_manager::only(SM),
+        ( ::acts_upon(SM) ; situation_manager::only(SM) ), !,
         holds(Fluent, SM).
 
     :- public(holds/2).
