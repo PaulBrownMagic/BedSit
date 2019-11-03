@@ -62,7 +62,7 @@ this in your loader and so refer to it in your application:
     logtalk_load([ sitcalc(loader)
                  , bedsit(loader)
                  ]),
-    situation_manager::new(sm, s0),
+    situation_manager::new(sm, sitcalc, s0),
     logtalk_load([
                  , ... your app files ...
                  ])
@@ -132,10 +132,10 @@ For the observations to work you need to tell Logtalk about the events:
 The simplest way to use a `persistency_manager` instance is to let it
 also instantiate the `situation_manager` for you. If you don't provide a
 starting situation and there is no file then your initial situation will
-be `s0` in SitCalc or `[]` in STRIPState:
+default to the situation given in the final argument:
 
 ```logtalk
-?- persistency_manager(sm, 'persisted/sm_store.pl').
+?- persistency_manager(sm, 'persisted/sm_store.pl', sitcalc, s0).
 true.
 
 ?- sm::sit(S).
@@ -161,10 +161,10 @@ some action is done, thus updating the base state.
 ### An Actor Category
 
 Actors are those that act. When you've got shared state, you don't just
-want anyone updating it without permission. The `actorc` category is how
+want anyone updating it without permission. The `actor` category is how
 you define who can do what.
 
-To create an actor you import the `actorc` category and define the
+To create an actor you import the `actor` category and define the
 actions it can do:
 
 ```logtalk
@@ -176,7 +176,7 @@ actions it can do:
 :- end_object.
 
 :- object(bean,
-    imports(actorc)).
+    imports(actor)).
 
     % Optional: define the situation_manager
     % instance bean acts_upon if more than one is defined:
@@ -202,18 +202,18 @@ Or if you need to pass the `situation_manager` instance explicitly:
 
 A fluent is a relationship between things that either holds in a
 situation or doesn't. Often the subject of that relationship is one
-of your objects. The `fluentc` category gives an OO flavour to your
+of your objects. The `fluent_predicates` category gives an OO flavour to your
 fluents.
 
 To create an object where some of its predicates are fluents, you need
-to import the `fluentc` category and declare which predicates are
+to import the `fluent_predicates` category and declare which predicates are
 fluents. You'll then be able to treat them like any other fluent or ask
 the object itself if they hold.
 
 For STRIPState:
 ```logtalk
 :- object(teacup,
-    imports(fluentc)).
+    imports(fluent_predicates)).
 
     fluent(contents/2).
 
@@ -230,7 +230,7 @@ For STRIPState:
 For SitCalc:
 ```logtalk
 :- object(teacup,
-    imports(fluentc)).
+    imports(fluent_predicates)).
 
     fluent(contents/2).
 
@@ -309,7 +309,7 @@ tell which instance of the `view_class` observes which ones:
     view_for(sm4).
 
     render(Sit) :-
-        findall(F, situation::holds(F, Sit), Fluents),
+        findall(F, sm::holds(F, Sit), Fluents),
         print_message(information, app_view, 'Fluents'::Fluents).
 
 :- end_object.
