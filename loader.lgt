@@ -10,8 +10,8 @@
 		situation_manager,
 		meta_psm,
 		persistent_manager,
-		actorc,
-		fluentc,
+		actor,
+		fluent_predicates,
 		meta_v,
 		view_class
 	], [

@@ -1,9 +1,8 @@
+:- category(actor).
 
-:- category(actorc).
-
-    :- info([ version is 1.1
+    :- info([ version is 1.2
             , author is 'Paul Brown'
-            , date is 2019/10/31
+            , date is 2019/11/3
             , comment is 'An category for actors: those who can do actions.'
             ]).
 
@@ -43,7 +42,7 @@
         ]).
     do(A, SM) :-
         nonvar(A), nonvar(SM),
-        extends_object(A, action), situation_manager::instance(SM),
+        situation_manager::instance(SM),
         functor(A, Func, Ar),
         ::action(Func/Ar),
         SM::do(A).

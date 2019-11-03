@@ -1,6 +1,6 @@
 % Todos
 :- object(todos,
-    imports([fluentc, actorc])).
+    imports([fluent_predicates, actor])).
 
    action(add_todo/1).
    action(remove_todo/1).
@@ -18,7 +18,7 @@
 
 % Actions
 :- object(add_todo(_Label_),
-    extends(action)).
+    imports(action)).
 
    poss(S) :-
        \+ todos::current_todo(todo(_Label_, _), S).
@@ -27,7 +27,7 @@
 
 
 :- object(remove_todo(_Label_),
-    extends(action)).
+    imports(action)).
 
    poss(S) :-
        todos::current_todo(todo(_Label_, _), S).
@@ -36,7 +36,7 @@
 
 
 :- object(mark_complete(_Label_),
-    extends(action)).
+    imports(action)).
 
    poss(S) :-
        todos::current_todo(todo(_Label_, todo), S).
@@ -53,7 +53,8 @@
         ]).
 
     render(Sit) :-
-        findall(ToDo, situation::holds(todos::current_todo(ToDo), Sit), ToDos),
+        situation_manager::only(SM),
+        findall(ToDo, SM::holds(todos::current_todo(ToDo), Sit), ToDos),
         print_message(information, rad, 'ToDos'::ToDos).
 
         /*

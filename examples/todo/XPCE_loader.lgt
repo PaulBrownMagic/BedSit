@@ -11,7 +11,7 @@
                      , bedsit(loader)
                      , todo
                      ]),
-        persistent_manager::new(sm, 'todo_storage.pl'),
+        persistent_manager::new(sm, 'todo_storage.pl', sitcalc, s0),
         define_events(after, _, do(_), _, view_class),
         define_events(after, _, do(_), _, persistent_manager),
         logtalk_load(todo_xpce),

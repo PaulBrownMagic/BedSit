@@ -1,4 +1,3 @@
-
 :- category(sit_man).
 
     :- info([ version is 1.1

@@ -1,12 +1,12 @@
 :- object(board,
-    imports(fluentc)).
+    imports(fluent_predicates)).
      fluent(grid/2).
      fluent(available_move/2).
 
      :- public(grid/2).
      grid(G, S) :-
          self(Self),
-         situation::holds(grid(Self, G), S).
+         sm::holds(grid(Self, G), S).
 
      :- public(available_move/2).
      available_move(N, S) :-
@@ -30,7 +30,7 @@
 
 
 :- object(game,
-    imports(fluentc)).
+    imports(fluent_predicates)).
    fluent(is_draw/1).
    fluent(over/1).
    fluent(current_player/2).
@@ -48,17 +48,17 @@
    :- public(current_player/2).
    current_player(P, Sit) :-
        self(Self),
-       situation::holds(current_player(Self, P), Sit).
+       sm::holds(current_player(Self, P), Sit).
 
    :- public(player_turn/2).
    player_turn(P, S) :-
        self(Self),
-       situation::holds(player_turn(Self, P), S).
+       sm::holds(player_turn(Self, P), S).
 
 :- end_object.
 
 
-:- object(move(_C_, _N_), extends(action)).
+:- object(move(_C_, _N_), imports(action)).
 
     poss(S) :-
         % game::player_turn(P, S),
@@ -81,7 +81,7 @@
 
 
 :- object(player(_C_),
-    imports([actorc, fluentc])).
+    imports([actor, fluent_predicates])).
     action(move/2).
     fluent(has_won/1).
 

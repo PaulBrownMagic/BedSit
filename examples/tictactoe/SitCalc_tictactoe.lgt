@@ -1,4 +1,4 @@
-:- object(board, imports(fluentc)).
+:- object(board, imports(fluent_predicates)).
      fluent(grid/2).
      fluent(available_move/2).
 
@@ -34,7 +34,7 @@
 :- end_object.
 
 
-:- object(game, imports(fluentc)).
+:- object(game, imports(fluent_predicates)).
    fluent(is_draw/1).
    fluent(over/1).
    fluent(current_player/2).
@@ -66,7 +66,7 @@
 :- end_object.
 
 
-:- object(move(_C_, _N_), extends(action)).
+:- object(move(_C_, _N_), imports(action)).
 
     poss(S) :-
         % game::player_turn(P, S),
@@ -76,7 +76,7 @@
 :- end_object.
 
 
-:- object(player(_C_), imports([actorc, fluentc])).
+:- object(player(_C_), imports([actor, fluent_predicates])).
 
     action(move/2).
     fluent(has_won/1).

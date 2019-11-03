@@ -1,4 +1,3 @@
-
 :- object(meta_sm,
     specializes(bedsit_metaclass)).
 
@@ -8,8 +7,8 @@
             , comment is 'Specialize the metaclass for situation managers.'
             ]).
 
-    :- public(new/2).
-    new(Instance, Sit) :-
-        ^^instantiate(Instance, [sit_(Sit)]).
+    :- public(new/3).
+    new(Instance, Backend, Sit) :-
+        ^^instantiate(Instance, [sit_(Sit), backend(Backend)]).
 
 :- end_object.

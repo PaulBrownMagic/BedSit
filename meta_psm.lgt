@@ -9,45 +9,34 @@
             , comment is 'An specialization of the metaclass for persistent_managers.'
             ]).
 
-    :- public(new/2).
-    :- mode(new(?object, +atom), zero_or_one).
-    :- info(new/2,
-        [ comment is 'Create an instance of persistent_manager observing the SituationManager, which is also created if it does not yet exist.'
-        , argnames is ['SituationManager', 'File']
-        ]).
-    new(SM, File) :-
-        atom(File),
-        situation::empty(Sit),
-        check_make(SM, File, Sit),
-        ^^instantiate(_, [persisting_file_(File), situation_manager_(SM)]).
-    :- public(new/3).
-    :- mode(new(?object, +atom, +term), zero_or_one).
-    :- info(new/3,
+    :- public(new/4).
+    :- mode(new(?object, +atom, +object, +term), zero_or_one).
+    :- info(new/4,
         [ comment is 'Create an instance of persistent_manager observing the SituationManager, which is also created with the Situation.'
-        , argnames is ['SituationManager', 'File', 'Situation']
+        , argnames is ['SituationManager', 'File', 'BackEnd', 'DefaultSituation']
         ]).
-    new(SM, File, Sit) :-
+    new(SM, File, Backend, Sit) :-
         atom(File), ground(Sit),
-        check_make(SM, File, Sit),
+        check_make(SM, File, Backend, Sit),
         ^^instantiate(_, [persisting_file_(File), situation_manager_(SM)]).
 
     % Check if situation_manager exists or instantiate
-    check_make(SM, _, _) :-
+    check_make(SM, _, _, _) :-
         % Already exists.
         nonvar(SM),
         situation_manager::instance(SM), !.
-    check_make(SM, File, Sit) :-
+    check_make(SM, File, Backend, Sit) :-
         (nonvar(SM), \+ current_object(SM) ; var(SM)),
-        restore(File, SM, Sit).
+        restore(File, SM, Backend, Sit).
 
     % On instantiation read in situation from file and use to instantiate situation manager
-    restore(File, SM, _) :-
+    restore(File, SM, Backend, _) :-
        os::file_exists(File),
        setup_call_cleanup(open(File, read, Stream), read(Stream, sit(Term)), close(Stream)),
-       situation_manager::new(SM, Term), !.
-    restore(File, SM, Sit) :-
+       situation_manager::new(SM, Backend, Term), !.
+    restore(File, SM, Backend, Sit) :-
        \+ os::file_exists(File),
-       situation_manager::new(SM, Sit).
+       situation_manager::new(SM, Backend, Sit).
 
    % On situation_manager update, broadcast to appropriate instances to persist
    after(SM, do(_), _Sender) :-
