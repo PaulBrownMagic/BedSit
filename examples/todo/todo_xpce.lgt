@@ -212,7 +212,7 @@
         completed_dialog::init,
         completed_browser::init,
         app_dialog::init,
-        situation::situation(Sit),
+        bedsit::situation(Sit),
         todo_view::render(Sit),
         !.
 

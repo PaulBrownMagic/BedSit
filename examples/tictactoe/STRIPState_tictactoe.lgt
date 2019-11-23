@@ -6,7 +6,7 @@
      :- public(grid/2).
      grid(G, S) :-
          self(Self),
-         situation::holds(grid(Self, G), S).
+         bedsit::holds(grid(Self, G), S).
 
      :- public(available_move/2).
      available_move(N, S) :-
@@ -48,12 +48,12 @@
    :- public(current_player/2).
    current_player(P, Sit) :-
        self(Self),
-       situation::holds(current_player(Self, P), Sit).
+       bedsit::holds(current_player(Self, P), Sit).
 
    :- public(player_turn/2).
    player_turn(P, S) :-
        self(Self),
-       situation::holds(player_turn(Self, P), S).
+       bedsit::holds(player_turn(Self, P), S).
 
 :- end_object.
 
@@ -162,7 +162,7 @@
         board::holds(available_move(N)), !,
         write('Computer chooses '), write(N), nl.
     choose_move(hard, N) :-
-        situation::situation(Sit),
+        bedsit::situation(Sit),
         ai_choose_move(N, Sit),
         write('Computer chooses '), write(N), nl.
 
@@ -248,13 +248,13 @@
 
     :- public(play/0).
     play :-
-        situation::situation(S),
+        bedsit::situation(S),
         unicode_terminal::render(S),
         turn.
 
     :- public(turn/0).
     turn :-
-        ( situation::holds(game::player_turn(P) and not game::over),
+        ( bedsit::holds(game::player_turn(P) and not game::over),
           P::choose_move(N),
           P::char(C),
           P::do(move(C, N)), !,

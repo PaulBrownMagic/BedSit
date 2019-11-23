@@ -53,11 +53,11 @@
         ]).
 
     render(Sit) :-
-        findall(ToDo, situation::holds(todos::current_todo(ToDo), Sit), ToDos),
+        findall(ToDo, bedsit::holds(todos::current_todo(ToDo), Sit), ToDos),
         print_message(information, rad, 'ToDos'::ToDos).
 
         /*
-         *findall(Action, situation::poss(Action, Sit), Actions),
+         *findall(Action, bedsit::poss(Action, Sit), Actions),
          *print_message(information, rad, 'PossActions'::Actions).
          */
 

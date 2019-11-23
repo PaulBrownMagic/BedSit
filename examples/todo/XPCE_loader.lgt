@@ -12,16 +12,11 @@
                      , todo
                      ]),
         PersistenceFile = 'todo_storage.pl',
-        writeln('Init1'),
         persistence(PersistenceFile)::restore(Sit),
-        writeln('Init2'),
-        situation::init(Sit),
-        writeln('Init3'),
-        define_events(after, situation, do(_), _, todo_view),
+        bedsit::init(Sit),
+        define_events(after, bedsit, do(_), _, todo_view),
         define_events(after, _, do(_), _, persistence(PersistenceFile)),
-        writeln('Init4444'),
         logtalk_load(todo_xpce),
-        writeln('Init5'),
         app::init
                  )).
 

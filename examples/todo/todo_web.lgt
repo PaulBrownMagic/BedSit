@@ -120,7 +120,7 @@
         Data = Message.get(data),
         ( Data \= "refresh"
         -> read_term_from_atom(Data, Action, []), todos::do(Action)
-        ; situation::situation(S), todo_view::render(S)
+        ; bedsit::situation(S), todo_view::render(S)
         ),
         receive.
 

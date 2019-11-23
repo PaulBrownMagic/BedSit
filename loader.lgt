@@ -4,8 +4,7 @@
                  , hierarchies(loader)
                  ]),
 	logtalk_load([
-		situation_interegation,
-		situation,
+		bedsit,
         persistence,
 		actor,
 		fluent_predicates,

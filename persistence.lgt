@@ -1,7 +1,7 @@
 :- object(persistence(_File_),
     implements(monitoring)).
 
-    :- info([ version is 1.3
+    :- info([ version is 1.4
             , author is 'Paul Brown'
             , date is 2019/11/23
             , comment is 'An observer of some situation manager that persists updates to the situation.'
@@ -32,7 +32,7 @@
                           close(Stream)), !.
     restore(Sit) :-
        \+ os::file_exists(_File_),
-       situation::empty(Sit).
+       bedsit::empty(Sit).
 
    % On update, persist the situation to the file.
    after(SM, do(_), _Sender) :-

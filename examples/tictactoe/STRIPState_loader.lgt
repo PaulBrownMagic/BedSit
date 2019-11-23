@@ -3,7 +3,7 @@
                  , bedsit(loader)
                  , random(loader)
                  ]),
-    situation::init([ grid(board, [ [1, 2, 3]
+    bedsit::init([ grid(board, [ [1, 2, 3]
                                   , [4, 5, 6]
                                   , [7, 8, 9]
                                   ])
@@ -12,7 +12,7 @@
                     , current_player(game, computer(o, hard))
                     ]),
     logtalk_load('STRIPState_tictactoe'),
-    define_events(after, situation, do(_), _, unicode_terminal),
+    define_events(after, bedsit, do(_), _, unicode_terminal),
     os::time_stamp(TS),
     Int is round(TS),
     fast_random::randomize(Int)

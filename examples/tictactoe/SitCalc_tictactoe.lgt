@@ -156,7 +156,7 @@
         board::holds(available_move(N)), !,
         write('Computer chooses '), write(N), nl.
     choose_move(hard, N) :-
-        situation::situation(Sit),
+        bedsit::situation(Sit),
         ai_choose_move(N, Sit),
         write('Computer chooses '), write(N), nl.
 
@@ -242,13 +242,13 @@
 
     :- public(play/0).
     play :-
-        situation::situation(S),
+        bedsit::situation(S),
         unicode_terminal::render(S),
         turn.
 
     :- public(turn/0).
     turn :-
-        ( situation::holds(game::player_turn(P) and not game::over),
+        ( bedsit::holds(game::player_turn(P) and not game::over),
           P::choose_move(N),
           P::char(C),
           P::do(move(C, N)), !,

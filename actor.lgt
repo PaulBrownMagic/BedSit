@@ -1,6 +1,6 @@
 :- category(actor).
 
-    :- info([ version is 1.3
+    :- info([ version is 1.4
             , author is 'Paul Brown'
             , date is 2019/11/23
             , comment is 'An category for actors: those who can do actions.'
@@ -19,13 +19,13 @@
     :- meta_predicate(do(2)).
     :- mode(do(+object), zero_or_one).
     :- info(do/1,
-        [ comment is 'Do the Action via the situation manager.'
+        [ comment is 'Do the Action via bedsit.'
         , argnames is ['Action']
         ]).
     do(A) :-
         nonvar(A),
         functor(A, Func, Ar),
         ::action(Func/Ar),
-        situation::do(A).
+        bedsit::do(A).
 
 :- end_category.
