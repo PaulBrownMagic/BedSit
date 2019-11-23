@@ -1,1 +1,1 @@
-sit(do(add_todo('Make a cup of tea'),s0)).
+situation(do(add_todo('Make a cup of tea'),s0)).

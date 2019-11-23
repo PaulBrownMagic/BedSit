@@ -5,16 +5,23 @@
 
 
     :- initialization((
-        logtalk_load(xpce_hooks),
+        consult('xpce_hooks.pl'),
         logtalk_load([ sitcalc(loader)
                      , random(loader)
                      , bedsit(loader)
                      , todo
                      ]),
-        persistent_manager::new(sm, 'todo_storage.pl', sitcalc, s0),
-        define_events(after, _, do(_), _, view_class),
-        define_events(after, _, do(_), _, persistent_manager),
+        PersistenceFile = 'todo_storage.pl',
+        writeln('Init1'),
+        persistence(PersistenceFile)::restore(Sit),
+        writeln('Init2'),
+        situation::init(Sit),
+        writeln('Init3'),
+        define_events(after, situation, do(_), _, todo_view),
+        define_events(after, _, do(_), _, persistence(PersistenceFile)),
+        writeln('Init4444'),
         logtalk_load(todo_xpce),
+        writeln('Init5'),
         app::init
                  )).
 

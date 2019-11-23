@@ -156,7 +156,7 @@
         board::holds(available_move(N)), !,
         write('Computer chooses '), write(N), nl.
     choose_move(hard, N) :-
-        sm::sit(Sit),
+        situation::situation(Sit),
         ai_choose_move(N, Sit),
         write('Computer chooses '), write(N), nl.
 
@@ -202,7 +202,7 @@
 :- end_object.
 
 
-:- object(unicode_terminal, instantiates(view_class)).
+:- object(unicode_terminal, imports(view_category)).
 
     render(Sit) :-
         board::grid(Board, Sit),
@@ -242,13 +242,13 @@
 
     :- public(play/0).
     play :-
-        sm::sit(S),
+        situation::situation(S),
         unicode_terminal::render(S),
         turn.
 
     :- public(turn/0).
     turn :-
-        ( sm::holds(game::player_turn(P) and not game::over),
+        ( situation::holds(game::player_turn(P) and not game::over),
           P::choose_move(N),
           P::char(C),
           P::do(move(C, N)), !,

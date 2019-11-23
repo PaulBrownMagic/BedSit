@@ -4,16 +4,12 @@
                  , hierarchies(loader)
                  ]),
 	logtalk_load([
-		bedsit_metaclass,
-		sit_man,
-		meta_sm,
-		situation_manager,
-		meta_psm,
-		persistent_manager,
+		situation_interegation,
+		situation,
+        persistence,
 		actor,
 		fluent_predicates,
-		meta_v,
-		view_class
+		view_category
 	], [
 		optimize(on)
 	])

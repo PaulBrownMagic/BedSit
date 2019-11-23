@@ -46,15 +46,14 @@
 
 % View
 :- object(todo_view,
-    instantiates(view_class)).
+    imports(view_category)).
 
     :- uses(logtalk, [
             print_message/3
         ]).
 
     render(Sit) :-
-        situation_manager::only(SM),
-        findall(ToDo, SM::holds(todos::current_todo(ToDo), Sit), ToDos),
+        findall(ToDo, situation::holds(todos::current_todo(ToDo), Sit), ToDos),
         print_message(information, rad, 'ToDos'::ToDos).
 
         /*

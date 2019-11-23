@@ -1,14 +1,11 @@
-:- object(situation_manager,
-    imports(sit_man),
-    instantiates(meta_sm)).
+:- object(situation,
+    imports(situation_interegation)).
 
     :- info([ version is 1.3
             , author is 'Paul Brown'
-            , date is 2019/11/1
-            , comment is 'A situation manager: gatekeeper for a situation term.'
+            , date is 2019/11/23
+            , comment is 'A situation interegator: gatekeeper for a situation term.'
             ]).
-
-    :- private(backend/1).
 
     :- public(do/1).
     :- synchronized(do/1).
@@ -18,7 +15,7 @@
         , argnames is ['Action']
         ]).
     do(A) :-
-        ::sit(S),
+        ::situation(S),
         do(A, S).
 
     :- public(do/2).
@@ -39,7 +36,7 @@
         , argnames is ['Fluent']
         ]).
     holds(F) :-
-        ::sit(S),
+        ::situation(S),
         holds(F, S).
 
     :- public(holds/2).
@@ -50,7 +47,7 @@
         , argnames is ['Fluent', 'Situation']
         ]).
     holds(F, S) :-
-        ::backend(Situation),
+        implements_protocol(Situation, situation_protocol),
         Situation::holds(F, S).
 
     :- public(empty/1).
@@ -60,7 +57,7 @@
         , argnames is ['Situation']
         ]).
     empty(S) :-
-        ::backend(Situation),
+        implements_protocol(Situation, situation_protocol),
         Situation::empty(S).
 
 :- end_object.

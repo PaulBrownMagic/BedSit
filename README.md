@@ -1,7 +1,7 @@
 # BedSit
 
 BedSit is a **Bed**rock upon which to build your **Sit**uation driven
-application. It provides classes and categories that work with either
+application. It provides objects and categories that work with either
 [SitCalc](https://github.com/PaulBrownMagic/SitCalc) or
 [STRIPState](https://github.com/PaulBrownMagic/STRIPState) allowing you to get
 on with making your application without having to worry about such details.
@@ -48,71 +48,24 @@ logtalk_library_path(bedsit, my_logtalk_libraries('BedSit/')).
 
 ### Managing Situations
 
-BedSit provides a `situation_manager` class that you can instantiate to
-manage the situation, be it with SitCalc or STRIPState. The instance of
-a `situation_manager` is the gateway to the situation, you ask this what
-fluents hold and ask this to do actions.
+BedSit provides a `situation` prototype object that you can instantiate to
+manage the situation, be it with SitCalc or STRIPState. This object is the
+gateway to the situation term, you ask this what fluents hold and ask this to
+do actions.
 
-If your application only needs a single situation, you can instantiate
-this in your loader and so refer to it in your application:
-
-**`loader.lgt`**
-```logtalk
-:- initialization((
-    logtalk_load([ sitcalc(loader)
-                 , bedsit(loader)
-                 ]),
-    situation_manager::new(sm, sitcalc, s0),
-    logtalk_load([
-                 , ... your app files ...
-                 ])
-    )).
-```
-
-**some_app_file**
 ```logtalk
 ...
     todos::do(add_todo(Label)).
     todos::holds(completed(Todo)).
-    sm::holds(todos::completed(Todo) and todos::recent(Todo)).
-...
-```
-
-Only having a single `situation_manager` instance means we don't always have to
-explicitly name it, as per the first two examples in **some_app_file**.
-We can have more than one though, in which case we explicitly pass it:
-
-**some_app_file**
-```logtalk
-...
-    todos::do(add_todo(Label), sm).
-    todos::holds(completed(Todo), sm).
-    sm::holds(todos::completed(Todo) and todos::recent(Todo)).
-...
-```
-
-There's one handy exception to this. If `todos` only acts upon one `situation_manager`, we
-can declare this and thus skip passing the situation_manager explicitly
-when doing actions:
-
-**some_app_file**
-```logtalk
-:- object(todos,
-    imports(actorc)).
-
-    acts_upon(sm).
-
-...
-    todos::do(add_todo(Label)).
-    todos::holds(completed(Todo), sm).
+    situation::holds(todos::completed(Todo) and todos::recent(Todo)).
 ...
 ```
 
 ### Persisting Situations
 
-BedSit provides a `persistency_manager` class, instances of which observe a
-`situation_manager` instance and when an action is done, it persists the
-new situation to file. On loading, it can then restore the situation
+BedSit provides a `persistence` prototype object, which observes the
+`situation` prototype and when an action is done, it persists the
+new situation to file. On loading, it can be used to restore the situation
 from the file.
 
 For the observations to work you need to tell Logtalk about the events:
@@ -124,35 +77,27 @@ For the observations to work you need to tell Logtalk about the events:
                  , bedsit(loader)
                  , ... your app files ...
                  ]),
-    define_events(after, _, do(_), _, persistent_manager),
-    define_events(after, _, do(_, _), _, persistent_manager)
+    define_events(after, _, do(_), _, persistence),
     )).
 ```
 
-The simplest way to use a `persistency_manager` instance is to let it
-also instantiate the `situation_manager` for you. If you don't provide a
-starting situation and there is no file then your initial situation will
-default to the situation given in the final argument:
+The common way to use `persistence` is to restore the situation, then
+use this to initiate `situation`. If there is no file yet then your initial situation will
+default to the situation defined by your implementer of the
+`situation_protocol`s definition of the empty situation:
 
+
+**`loader.lgt`**
 ```logtalk
-?- persistency_manager(sm, 'persisted/sm_store.pl', sitcalc, s0).
-true.
-
-?- sm::sit(S).
-S = s0.
-```
-
-Or you can provide a default situation that's used only if the file
-doesn't exist yet, particularly useful for STRIPState.
-
-```logtalk
-?- persistency_manager(sm,
-     'persisted/sm_store.pl',
-     [current(level, 0), hp(player, 100)]).
-true.
-
-?- sm::sit(S).
-S = [current(level, 0), hp(player, 100)].
+:- initialization((
+    logtalk_load([ sitcalc(loader)
+                 , bedsit(loader)
+                 , ... your app files ...
+                 ]),
+    define_events(after, _, do(_), _, persistence('my_storage_file.pl')),
+	persistence('my_storage_file.pl')::restore(Sit),
+	situation::init(Sit)
+    )).
 ```
 
 **Note**: the persistent manager won't actually write the file until
@@ -187,15 +132,10 @@ actions it can do:
 :- end_object.
 ```
 
-Then if there's a single `situation_manager` instance in your app:
+Then it can do actions in your app:
 
 ```logtalk.
 ?- bean::do(jump).
-```
-Or if you need to pass the `situation_manager` instance explicitly:
-
-```logtalk
-?- bean::do(jump, sm).
 ```
 
 ### A Fluent Category
@@ -253,12 +193,13 @@ Some example queries:
 ?- sm::sit(Sit), situation:holds(teacup::contents(Drink) and not teacup::colour(black), Sit).
 ```
 
-### A View Class
+### A View Category
 
-The `view_class` is the bedrock of the output part of your UI. The
+The `view_category` is the bedrock of the output part of your UI. The
 view works by observing changes to situations in any situation manager
 and passing that situation to the `render/1` predicate. As it's
-observing events, you'll need to define this in the loader:
+observing events, you'll need to define this in the loader for whatever
+object imports this category in your app:
 
 **`loader.lgt`**
 ```logtalk
@@ -267,8 +208,7 @@ observing events, you'll need to define this in the loader:
                  , bedsit(loader)
                  , ... your app files ...
                  ]),
-    define_events(after, _, do(_), _, view_class),
-    define_events(after, _, do(_, _), _, view_class)
+    define_events(after, _, do(_), _, app_view),
     )).
 ```
 
@@ -276,7 +216,7 @@ Now you can define your own view object:
 
 ```logtalk
 :- object(app_view,
-    instantiates(view_class)).
+    imports(view_category)).
 
     :- uses(logtalk, [
             print_message/3
@@ -292,27 +232,3 @@ Now you can define your own view object:
 It's recommended to make use of `print_message/3` and then hook into
 this for the actual graphical representation. This'll make your app
 easier to port to different GUIs and test.
-
-When you have multiple `situation_manager` instances, you'll need to
-tell which instance of the `view_class` observes which ones:
-
-
-```logtalk
-:- object(app_view,
-    instantiates(view_class)).
-
-    :- uses(logtalk, [
-            print_message/3
-        ]).
-
-    view_for(sm1).
-    view_for(sm4).
-
-    render(Sit) :-
-        findall(F, sm::holds(F, Sit), Fluents),
-        print_message(information, app_view, 'Fluents'::Fluents).
-
-:- end_object.
-```
-
-
