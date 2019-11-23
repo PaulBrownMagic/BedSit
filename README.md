@@ -48,7 +48,7 @@ logtalk_library_path(bedsit, my_logtalk_libraries('BedSit/')).
 
 ### Managing Situations
 
-BedSit provides a `situation` prototype object that you can instantiate to
+BedSit provides a `bedsit` prototype object that you can instantiate to
 manage the situation, be it with SitCalc or STRIPState. This object is the
 gateway to the situation term, you ask this what fluents hold and ask this to
 do actions.
@@ -57,14 +57,14 @@ do actions.
 ...
     todos::do(add_todo(Label)).
     todos::holds(completed(Todo)).
-    situation::holds(todos::completed(Todo) and todos::recent(Todo)).
+    bedsit::holds(todos::completed(Todo) and todos::recent(Todo)).
 ...
 ```
 
 ### Persisting Situations
 
 BedSit provides a `persistence` prototype object, which observes the
-`situation` prototype and when an action is done, it persists the
+`bedsit` prototype and when an action is done, it persists the
 new situation to file. On loading, it can be used to restore the situation
 from the file.
 
@@ -82,7 +82,7 @@ For the observations to work you need to tell Logtalk about the events:
 ```
 
 The common way to use `persistence` is to restore the situation, then
-use this to initiate `situation`. If there is no file yet then your initial situation will
+use this to initiate `bedsit`. If there is no file yet then your initial situation will
 default to the situation defined by your implementer of the
 `situation_protocol`s definition of the empty situation:
 
@@ -96,7 +96,7 @@ default to the situation defined by your implementer of the
                  ]),
     define_events(after, _, do(_), _, persistence('my_storage_file.pl')),
 	persistence('my_storage_file.pl')::restore(Sit),
-	situation::init(Sit)
+	bedsit::init(Sit)
     )).
 ```
 
@@ -160,7 +160,7 @@ For STRIPState:
     :- public(contents/2).
     contents(C, Sit) :-
         self(Self),
-        situation::holds(contents(Self, C), Sit).
+        bedsit::holds(contents(Self, C), Sit).
 
     :- public(colour/1).
     colour(white).
@@ -189,8 +189,8 @@ Some example queries:
 ```
 ?- teacup::holds(contents(C)). % single situation_manager instance
 ?- teacup::holds(contents(C), sm). % passing situation_manager instance object
-?- sm::holds(teacup::contents(Drink) and teacup::colour(Colour)).
-?- sm::sit(Sit), situation:holds(teacup::contents(Drink) and not teacup::colour(black), Sit).
+?- bedsit::holds(teacup::contents(Drink) and teacup::colour(Colour)).
+?- bedsit::sit(Sit), bedsit:holds(teacup::contents(Drink) and not teacup::colour(black), Sit).
 ```
 
 ### A View Category
@@ -223,7 +223,7 @@ Now you can define your own view object:
         ]).
 
     render(Sit) :-
-        findall(F, situation::holds(F, Sit), Fluents),
+        findall(F, bedsit::holds(F, Sit), Fluents),
         print_message(information, app_view, 'Fluents'::Fluents).
 
 :- end_object.
