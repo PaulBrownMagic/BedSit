@@ -65,12 +65,13 @@
         % P::char(_C_),
         board::available_move(_N_, S).
 
-    retract_fluents([ grid(board, _)
-                     , player_turn(game, _)
-                     ]).
-    assert_fluents([ grid(board, B)
-                    , player_turn(game, P)
-                    ]) :-
+    retract_assert([ grid(board, _)
+                   , player_turn(game, _)
+                   ]
+                   ,
+                   [ grid(board, B)
+                   , player_turn(game, P)
+                   ]) :-
         board::holds(grid(G)),
         board::update(_N_, _C_, G, B),
         game::holds(player_turn(C)),
