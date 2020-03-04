@@ -1,8 +1,8 @@
 :- category(fluent_predicates).
 
-    :- info([ version is 1.4
+    :- info([ version is 1:4:0
             , author is 'Paul Brown'
-            , date is 2019/11/23
+            , date is 2019-11-23
             , comment is 'An category for objects with fluent predicates.'
             ]).
 
