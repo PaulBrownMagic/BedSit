@@ -1,9 +1,9 @@
 :- category(view_category,
     implements(monitoring)).
 
-    :- info([ version is 1.1
+    :- info([ version is 1:1:0
             , author is 'Paul Brown'
-            , date is 2019/11/23
+            , date is 2019-11-23
             , comment is 'A parent class for views that are sent the situation to render'
             ]).
 
