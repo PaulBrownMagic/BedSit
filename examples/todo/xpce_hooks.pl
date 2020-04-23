@@ -30,7 +30,6 @@
 
 :- use_module(library(pce)).
 
-
 :- pce_begin_class(logtalk, message).
 
 	initialise(Msg, Obj:prolog, Functor:prolog, Args:unchecked ...) :->

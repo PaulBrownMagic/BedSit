@@ -14,9 +14,9 @@
         PersistenceFile = 'todo_storage.pl',
         persistence(PersistenceFile)::restore(Sit),
         bedsit::init(Sit),
+        logtalk_load(todo_xpce),
         define_events(after, bedsit, do(_), _, todo_view),
         define_events(after, _, do(_), _, persistence(PersistenceFile)),
-        logtalk_load(todo_xpce),
         app::init
                  )).
 

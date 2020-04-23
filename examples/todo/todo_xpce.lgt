@@ -110,6 +110,7 @@
        ^^send(below(@todo_dialog)).
 
    :- public(update/1).
+   update([]).
    update(Labels) :-
       ^^send(members(Labels)).
 
@@ -143,6 +144,7 @@
        ^^send(below(@completed_dialog)).
 
    :- public(update/1).
+   update([]).
    update(Labels) :-
        ^^send(members(Labels)).
 
